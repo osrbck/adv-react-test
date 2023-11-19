@@ -1,35 +1,48 @@
 import "./App.css";
-import DessertsList from "./DessertsList";
-
-const desserts = [
-  {
-    name: "Chocolate Cake",
-    calories: 400,
-    createdAt: "2022-09-01",
-  },
-  {
-    name: "Ice Cream",
-    calories: 200,
-    createdAt: "2022-01-02",
-  },
-  {
-    name: "Tiramisu",
-    calories: 300,
-    createdAt: "2021-10-03",
-  },
-  {
-    name: "Cheesecake",
-    calories: 600,
-    createdAt: "2022-01-04",
-  },
-];
+import { useState } from "react";
 
 function App() {
+
+  const [score, setScore] = useState("0");
+  const [comment, setComment] = useState("");
+
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    if(Number(score) <= 5 && comment.length <= 10){
+      alert("Please provide a comment explaining why the experience was poor.");
+      return;
+    }
+    console.log("Form submitted!");
+    setComment("");
+    setScore("0");
+  }
+
   return (
-    <div className="App">
-      <h2>List of low calorie desserts:</h2>
-      <DessertsList data={desserts} />
-    </div>
+   <div className="App">
+    <form onSubmit={handleSubmit}>
+      <fieldset>
+        <h2>Feedback Form</h2>
+        <div className="Field">
+          <label>Score: {score}⭐️ </label>
+          <input 
+          type="range" 
+          min="0" 
+          max="10"
+          value={score} 
+          onChange={e => setScore(e.target.value)}
+          />
+        </div>
+        <div className="Field">
+          <label>Comment:</label>
+          <textarea 
+          value={comment} 
+          onChange={e => setComment(e.target.value)}
+          />
+        </div>
+        <button type="submit">Submit</button>
+      </fieldset>
+    </form>
+   </div>
   );
 }
 
