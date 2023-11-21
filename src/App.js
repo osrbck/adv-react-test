@@ -1,49 +1,50 @@
 import "./App.css";
-import { useState } from "react";
+import { useUser } from "./UseContext";
+import { UserProvider } from "./UseContext";
 
-function App() {
+const LoggedInUser = () => {
+  const { user } = useUser();
+  return(
+    <p>
+      Hello <span className="Username">{user.name}</span>
+    </p>
+  );
+};
 
-  const [score, setScore] = useState("0");
-  const [comment, setComment] = useState("");
+const Header = () => {
+  return(
+    <header>
+      <h2>Blog App</h2>
+      <LoggedInUser />
+    </header>
+  );
+};
 
-  const handleSubmit = (e) =>{
-    e.preventDefault();
-    if(Number(score) <= 5 && comment.length <= 10){
-      alert("Please provide a comment explaining why the experience was poor.");
-      return;
-    }
-    console.log("Form submitted!");
-    setComment("");
-    setScore("0");
-  }
-
-  return (
-   <div className="App">
-    <form onSubmit={handleSubmit}>
-      <fieldset>
-        <h2>Feedback Form</h2>
-        <div className="Field">
-          <label>Score: {score}⭐️ </label>
-          <input 
-          type="range" 
-          min="0" 
-          max="10"
-          value={score} 
-          onChange={e => setScore(e.target.value)}
-          />
-        </div>
-        <div className="Field">
-          <label>Comment:</label>
-          <textarea 
-          value={comment} 
-          onChange={e => setComment(e.target.value)}
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </fieldset>
-    </form>
-   </div>
+const Page = () => {
+  const { user } = useUser();
+  return(
+    <div>
+      <h2>Lorem</h2>
+      <p>Lorem Ipsum dolor sit amet, consectetur adispiscing elit.</p>
+      <p>Written by {user.name}</p>
+    </div>
+  );
+};
+function App(){
+  return(
+    <div className="App">
+      <Header/>
+      <Page/>
+    </div>
   );
 }
 
-export default App;
+function Root(){
+  return (
+    <UserProvider>
+      <App />
+    </UserProvider>
+  );
+}
+
+export default Root;
