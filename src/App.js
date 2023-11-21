@@ -1,50 +1,27 @@
+import React from "react";
 import "./App.css";
-import { useUser } from "./UseContext";
-import { UserProvider } from "./UseContext";
 
-const LoggedInUser = () => {
-  const { user } = useUser();
-  return(
-    <p>
-      Hello <span className="Username">{user.name}</span>
-    </p>
-  );
-};
+function App(){
+  const [toggle, setToggle] = React.useState(false);
 
-const Header = () => {
-  return(
-    <header>
-      <h2>Blog App</h2>
-      <LoggedInUser />
-    </header>
-  );
-};
+  const clickHandler = () => {
+    setToggle(!toggle);
+  }
 
-const Page = () => {
-  const { user } = useUser();
+  React.useEffect( () => {
+    document.title = toggle ? "Welcome !" : "using the useEffect hook"
+  }, []);
+
   return(
     <div>
-      <h2>Lorem</h2>
-      <p>Lorem Ipsum dolor sit amet, consectetur adispiscing elit.</p>
-      <p>Written by {user.name}</p>
+      <h1>useEffect hook</h1>
+      <button onClick={clickHandler}>
+        Toggle Message
+      </button>
+      {toggle && <h2>Welcome !</h2>}
     </div>
-  );
-};
-function App(){
-  return(
-    <div className="App">
-      <Header/>
-      <Page/>
-    </div>
-  );
+  )
 }
 
-function Root(){
-  return (
-    <UserProvider>
-      <App />
-    </UserProvider>
-  );
-}
 
-export default Root;
+export default App;
