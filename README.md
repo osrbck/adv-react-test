@@ -1,30 +1,18 @@
-# Random User Creator API using React.JS
+# Cursor position with render props
 
-## Step 1
+## Implement the body of handleMousePositionChange
 
-Inside the fetchData() function's code block, you executed the fetch() function, passing it a single string argument: "https://randomuser.me/api/?results=1".
-
-
-## Step 2
-
-Next, inside the fetchData() function, under the fetch() function call, you added the following piece of code:
+The mousemove handler function receives an event as parameter that contains the mouse coordinates as clientX and clientY properties. Therefore you can provide a position update by calling the state setter setMousePosition with the new values.
 
 
-### Step 3
+## Implement the return statement of the component
 
-You then added another then() call, which takes an arrow function.
-
-The passed-in arrow function, receives a data argument, and using that data argument, it invokes the setUser() function, with the data passed to it.
+ The MousePosition component receives a render prop, which is the special prop name designed by convention to specify a function that returns some JSX. Since the MousePosition component does not take care of any visualization logic, but rather encapsulates cross-cutting concerns, it should return the result of calling the render function with the mousePosition as an argument. In other words, it’s up to the components that consume MousePosition to specify what sort of UI they want to display when they receive a new value of the mouse position on the screen. 
 
 
-## Step 4
+### The PanelMouseLogger component should not receive any props.
+Hence, the early return from the previous implementation if no props were provided is no longer needed.
 
-In the return statement of the App component, under the h1 heading that reads “Customer data”,  you added an h2 heading, with the following code: Name: {user.results[0].name.first}
+Instead, the mousePosition is now injected as the first argument of the render function prop that MousePosition uses. It’s in this render function body where the previous JSX should be extracted and returned. 
 
-
-## Step 5
-
-You then updated the return statement of the App component by adding another line of code under the newly-added h2.
-
-**If you wanna add an img element, with the src attribute and an alt attribute holding the following code:**
- {user.results[0].picture.large}
+The component should not receive any props and the early if statement should be removed. The particular UI for this component is provided as part of the render prop as well. 

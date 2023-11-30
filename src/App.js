@@ -1,28 +1,72 @@
-import React from "react";
+import "./App.css";
+import { useEffect, useState } from "react";
 
-function App(){
-  const [user, setUser] = React.useState([]);
+const MousePosition = ({ render }) => {
+  const [mousePosition, setMousePosition] = useState({
+    x: 0,
+    y: 0,
+  });
 
-  const fetchData = () =>{
-    fetch("https://randomuser.me/api/?results=1")
-    .then(response => response.json())
-    .then(data => setUser(data));
-  }
-  React.useEffect( () => {
-    fetchData();
+  useEffect(() => {
+    const handleMousePositionChange = (e) => {
+      // Update mouse position
+      setMousePosition({
+        x: e.clientX,
+        y: e.clientY,
+      });
+    };
+
+    window.addEventListener("mousemove", handleMousePositionChange);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMousePositionChange);
+    };
   }, []);
 
- return Object.keys(user).length > 0 ? (
-  <div>
-    <h1>Data returned</h1>
-    <h2>First Name: {user.results[0].name.first}</h2>
-    <h2>Last Name: {user.results[0].name.last}</h2>
-  </div>
- ) : (
-  <h1>Data pending.</h1>
- );
- }
+  // Pass mousePosition to the render prop
+  return render(mousePosition);
+};
 
+// This component should not receive any props
+const PanelMouseLogger = () => {
+  return (
+    <div className="BasicTracker">
+      {/* Use MousePosition as a render prop */}
+      <MousePosition render={(mousePosition) => (
+        <div>
+          <p>Mouse position:</p>
+          <div className="Row">
+            <span>x: {mousePosition.x}</span>
+            <span>y: {mousePosition.y}</span>
+          </div>
+        </div>
+      )} />
+    </div>
+  );
+};
 
+// This component should not receive any props
+const PointMouseLogger = () => {
+  return (
+    <div>
+      {/* Use MousePosition as a render prop */}
+      <MousePosition render={(mousePosition) => (
+        <p>
+          ({mousePosition.x}, {mousePosition.y})
+        </p>
+      )} />
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <div className="App">
+      <header className="Header">Cursor Position Renderer</header>
+      <PanelMouseLogger />
+      <PointMouseLogger />
+    </div>
+  );
+}
 
 export default App;
